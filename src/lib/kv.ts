@@ -1,6 +1,11 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import { KV_KEYS, DEFAULT_CONFIG } from "./constants";
 import type { RaceConfig, Loop, VideoMode, RaceFinished, RaceData } from "./types";
+
+const kv = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
 export async function getRaceData(): Promise<RaceData> {
   const [config, finished, loops, videoMode, tiktokUsername, videos] =
