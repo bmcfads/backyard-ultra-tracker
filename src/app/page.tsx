@@ -86,7 +86,7 @@ export default async function DisplayPage() {
 
           <div className="text-center">
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
-              Next Loop Start
+              Next Loop Starts In
             </p>
             <p className="text-5xl font-heading leading-none">
               <CountdownTimer config={config} finished={finished} />
