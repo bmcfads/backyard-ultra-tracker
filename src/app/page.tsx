@@ -21,26 +21,26 @@ export default async function DisplayPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
         {/* Status header */}
-        <h1 className="text-center text-lg font-mono tracking-widest uppercase text-muted mb-10">
+        <h1 className="text-center uppercase mb-10">
           {statusLabel(status)}
         </h1>
 
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-4 mb-10">
           <div className="text-center">
-            <p className="text-xs font-mono text-muted uppercase tracking-widest mb-2">
+            <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Loops Completed
             </p>
-            <p className="text-7xl font-mono tabular-nums leading-none">
+            <p className="text-8xl font-heading tabular-nums leading-none">
               {String(loopCount).padStart(2, "0")}
             </p>
           </div>
 
           <div className="text-center">
-            <p className="text-xs font-mono text-muted uppercase tracking-widest mb-2">
+            <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Total Distance
             </p>
-            <p className="text-7xl font-mono tabular-nums leading-none">
+            <p className="text-8xl font-heading tabular-nums leading-none">
               {loopCount === 0 ? (
                 <span>0</span>
               ) : (
@@ -51,16 +51,16 @@ export default async function DisplayPage() {
           </div>
 
           <div className="text-center">
-            <p className="text-xs font-mono text-muted uppercase tracking-widest mb-2">
+            <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Next Loop Start
             </p>
-            <p className="text-4xl font-mono leading-none mb-4">
+            <p className="text-4xl font-heading leading-none mb-4">
               <CountdownTimer config={config} finished={finished} />
             </p>
-            <p className="text-xs font-mono text-muted uppercase tracking-widest mb-2">
+            <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Elapsed Time
             </p>
-            <p className="text-4xl font-mono leading-none">
+            <p className="text-4xl font-heading leading-none">
               <ElapsedTimer config={config} finished={finished} />
             </p>
           </div>
@@ -69,9 +69,9 @@ export default async function DisplayPage() {
         {/* Race info card */}
         {config.title && (
           <div className="fact-card mb-10">
-            <h2 className="text-sm font-mono text-muted uppercase tracking-widest mb-3">
+            <h3 className="uppercase mb-3">
               {config.title}
-            </h2>
+            </h3>
             <div className="flex flex-col gap-1 text-sm text-text/80">
               {config.startDate && config.startTime && (
                 <p>
@@ -92,7 +92,7 @@ export default async function DisplayPage() {
         )}
 
         {/* Loop table */}
-        <h2 className="text-center text-sm font-mono text-muted uppercase tracking-widest mb-4">
+        <h2 className="text-center uppercase mb-4">
           Loop Information
         </h2>
         <div className="mb-10">
@@ -103,7 +103,7 @@ export default async function DisplayPage() {
         {((videoMode === "profile" && tiktokUsername) ||
           (videoMode === "urls" && videos.length > 0)) && (
           <>
-            <h2 className="text-center text-sm font-mono text-muted uppercase tracking-widest mb-6">
+            <h2 className="text-center uppercase mb-6">
               Updates
             </h2>
             <div className="mb-10">

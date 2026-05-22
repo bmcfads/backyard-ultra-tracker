@@ -43,7 +43,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-xl font-mono mb-8 text-center">Admin</h1>
+      <h1 className="mb-8 text-center">Admin</h1>
 
       <RaceConfigForm config={data.config} password={password} onRefresh={onRefresh} />
 
@@ -52,7 +52,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
       <button
         onClick={toggleFinish}
         disabled={finishing}
-        className={`w-full py-3 px-4 rounded font-mono text-sm transition-colors ${
+        className={`w-full py-3 px-4 rounded text-sm transition-colors ${
           data.finished.isFinished
             ? "bg-muted/30 text-muted border border-border hover:bg-muted/40"
             : "bg-red-700 hover:bg-red-800 text-white"

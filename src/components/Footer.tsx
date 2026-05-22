@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <footer className="border-t border-border mt-16 py-8 px-4 text-center">
-      <h3 className="text-sm font-mono text-muted mb-3">Backyard Ultra Tracker</h3>
+      <h3 className="mb-3">Backyard Ultra Tracker</h3>
       <p className="text-xs text-muted mb-4">
         &copy; {new Date().getFullYear()} Brian McFadden. All rights reserved.
       </p>

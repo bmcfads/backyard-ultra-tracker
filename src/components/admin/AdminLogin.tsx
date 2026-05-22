@@ -35,7 +35,7 @@ export function AdminLogin({ onAuth }: AdminLoginProps) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-xl font-mono mb-6 text-center">Admin Access</h1>
+        <h1 className="mb-6 text-center">Admin Access</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="password"

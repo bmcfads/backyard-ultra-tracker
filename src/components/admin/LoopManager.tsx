@@ -75,12 +75,12 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-sm font-mono text-muted uppercase tracking-widest">Loops</h2>
+      <h2 className="uppercase">Loops</h2>
 
       <button
         onClick={handleLoopCompleted}
         disabled={busy === "auto"}
-        className="w-full py-4 rounded bg-accent/10 border border-accent/30 text-accent font-mono text-lg hover:bg-accent/20 transition-colors"
+        className="w-full py-4 rounded bg-accent/10 border border-accent/30 text-accent text-lg hover:bg-accent/20 transition-colors"
       >
         {busy === "auto" ? "Recording..." : "Loop Completed"}
       </button>
@@ -93,7 +93,7 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
               className="border border-border rounded p-3 flex flex-col gap-2 text-sm"
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-muted">#{loop.loopCount}</span>
+                <span className="text-muted">#{loop.loopCount}</span>
                 <button
                   onClick={() => handleDelete(loop.id)}
                   disabled={busy === loop.id + "-del"}
@@ -133,7 +133,7 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
                   />
                 </div>
               </div>
-              <div className="flex gap-4 text-xs text-muted font-mono">
+              <div className="flex gap-4 text-xs text-muted">
                 <span>Duration: {loop.duration}</span>
                 <span>Pace: {loop.pace}/km</span>
                 <span>{loop.cumulativeKm.toFixed(2)} km</span>
