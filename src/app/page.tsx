@@ -72,26 +72,32 @@ export default async function DisplayPage() {
 
         {/* Race info card */}
         {config.title && (
-          <div className="fact-card mb-10 mt-16">
-            <h3 className="uppercase mb-3">
+          <div className="fact-card mt-14 mb-10 text-center">
+            <h4 className="uppercase mb-4">
               {config.title}
-            </h3>
-            <div className="flex flex-col gap-1 text-sm text-text/80">
+            </h4>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-1 text-sm text-text/80">
               {config.startDate && config.startTime && (
                 <p>
-                  <span className="text-muted">Start:</span>{" "}
-                  {config.startDate} at {config.startTime}
+                  📅&nbsp;&nbsp;{config.startDate} at {config.startTime}
                 </p>
               )}
               {config.location && (
                 <p>
-                  <span className="text-muted">Location:</span> {config.location}
+                  📍 {config.location}
                 </p>
               )}
-              {config.summary && (
-                <p className="mt-2 text-text/70">{config.summary}</p>
-              )}
             </div>
+            {config.summary && (
+              <>
+                <hr className="mt-6 border-border" />
+                <p className="mt-6 text-sm text-text/70">
+                  {config.summary.split("\n").map((line, i) => (
+                    <span key={i}>{line}<br /></span>
+                  ))}
+                </p>
+              </>
+            )}
           </div>
         )}
 
