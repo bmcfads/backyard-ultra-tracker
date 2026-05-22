@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        "ping-slow": "ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite",
+      },
       fontFamily: {
         mono: ["var(--font-mono)", "monospace"],
         sans: ["var(--font-atkinson)", "sans-serif"],
@@ -20,6 +23,7 @@ const config: Config = {
         muted: "#999999",
         text: "#e5e5e5",
         accent: "#a3e635",
+        brand: "#00C1D5",
       },
     },
   },

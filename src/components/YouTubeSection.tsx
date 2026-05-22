@@ -5,7 +5,7 @@ interface YouTubeSectionProps {
 export function YouTubeSection({ videoIds }: YouTubeSectionProps) {
   if (videoIds.length === 0) {
     return (
-      <p className="text-muted text-sm text-center py-4">No update videos posted yet.</p>
+      <p className="text-muted text-sm text-center py-4">No videos posted yet.</p>
     );
   }
 

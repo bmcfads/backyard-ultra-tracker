@@ -42,9 +42,17 @@ export default async function DisplayPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
         {/* Status header */}
-        <h1 className="text-center uppercase leading-none mb-10">
-          {statusLabel(status)}
-        </h1>
+        <div className="flex items-center justify-center gap-3 mb-10">
+          {status === "in_progress" && (
+            <span className="relative flex h-3 w-3 flex-shrink-0">
+              <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-brand" />
+            </span>
+          )}
+          <h1 className="text-center uppercase leading-none">
+            {statusLabel(status)}
+          </h1>
+        </div>
 
         <hr className="border-border mb-10" />
 
@@ -136,9 +144,9 @@ export default async function DisplayPage() {
         {youtubePlaylistId && (
           <>
             <h2 className="text-center mb-4">
-              Updates
+              Video Updates
             </h2>
-            <div className="mb-4">
+            <div className="mb-2">
               <YouTubeSection videoIds={youtubeVideoIds} />
             </div>
           </>

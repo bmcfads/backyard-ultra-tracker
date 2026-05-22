@@ -1,7 +1,8 @@
 export function Footer() {
   return (
     <footer className="border-t border-border mt-10 py-8 px-4 text-center">
-      <h3 className="mb-3">Backyard Ultra Tracker</h3>
+      <img src="/bmcfads-logo-white.svg" alt="bmcfads logo" className="h-5 w-auto mx-auto mb-2" />
+      <p className="font-heading font-extrabold text-[0.9rem] tracking-[0.05em] uppercase text-brand mb-3">Backyard Ultra Tracker</p>
       <p className="text-xs text-muted mb-4">
         &copy; {new Date().getFullYear()} Brian McFadden. All rights reserved.
       </p>
