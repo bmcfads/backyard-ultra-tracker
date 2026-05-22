@@ -23,6 +23,14 @@ const atkinson = localFont({
 export const metadata: Metadata = {
   title: "Backyard Ultra Tracker",
   description: "Live tracking for a backyard ultra race.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
