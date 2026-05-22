@@ -4,6 +4,7 @@ import "./globals.css";
 
 const barlow = localFont({
   src: [
+    { path: "../fonts/barlow-semibold.woff2", weight: "600", style: "normal" },
     { path: "../fonts/barlow-extrabold.woff2", weight: "800", style: "normal" },
   ],
   variable: "--font-barlow",

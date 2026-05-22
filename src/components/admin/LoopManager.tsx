@@ -16,20 +16,6 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
   const [newTime, setNewTime] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
 
-  async function handleLoopCompleted() {
-    setBusy("auto");
-    await fetch("/api/loops", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-auth": password,
-      },
-      body: JSON.stringify({ auto: true }),
-    });
-    await onRefresh();
-    setBusy(null);
-  }
-
   async function handleAddManual() {
     if (!newDate || !newTime) return;
     setBusy("manual");
@@ -76,14 +62,6 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
   return (
     <div className="flex flex-col gap-4">
       <h2>Loops</h2>
-
-      <button
-        onClick={handleLoopCompleted}
-        disabled={busy === "auto"}
-        className="w-full py-4 rounded bg-accent/10 border border-accent/30 text-accent text-lg hover:bg-accent/20 transition-colors"
-      >
-        {busy === "auto" ? "Recording..." : "Loop Completed"}
-      </button>
 
       {loops.length > 0 && (
         <div className="flex flex-col gap-2 mt-2">
