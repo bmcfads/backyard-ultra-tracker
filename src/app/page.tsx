@@ -4,6 +4,7 @@ import { LOOP_DISTANCE_KM } from "@/lib/constants";
 import { CountdownTimer, ElapsedTimer } from "@/components/Timers";
 import { LoopTable } from "@/components/LoopTable";
 import { YouTubeSection } from "@/components/YouTubeSection";
+import { AutoRefresh } from "@/components/AutoRefresh";
 import { Footer } from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,7 @@ export default async function DisplayPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <AutoRefresh />
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
         {/* Status header */}
         <div className="flex items-center justify-center gap-3 mb-10">
