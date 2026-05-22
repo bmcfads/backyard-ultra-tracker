@@ -8,6 +8,7 @@
 
 @layer base {
   html {
+    font-size: 18px;
     background-color: #0a0a0a;
     color: #e5e5e5;
   }

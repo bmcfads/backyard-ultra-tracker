@@ -25,28 +25,29 @@ export default async function DisplayPage() {
           {statusLabel(status)}
         </h1>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4 mb-10">
-          <div className="text-center">
-            <p className="text-xs text-muted uppercase tracking-widest mb-2">
-              Loops Completed
-            </p>
-            <p className="text-8xl font-heading tabular-nums leading-none">
-              {String(loopCount).padStart(2, "0")}
-            </p>
-          </div>
+        {/* Stats: loops completed */}
+        <div className="text-center mb-8">
+          <p className="text-xs text-muted uppercase tracking-widest mb-2">
+            Loops Completed
+          </p>
+          <p className="text-8xl font-heading tabular-nums leading-none">
+            {String(loopCount).padStart(2, "0")}
+          </p>
+        </div>
 
+        {/* Stats: distance + timers */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
           <div className="text-center">
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Total Distance
             </p>
-            <p className="text-8xl font-heading tabular-nums leading-none">
+            <p className="text-5xl font-heading tabular-nums leading-none">
               {loopCount === 0 ? (
                 <span>0</span>
               ) : (
                 <span>{totalDistance}</span>
               )}
-              <span className="text-2xl text-muted ml-1">km</span>
+              <span className="text-xl text-muted ml-1">km</span>
             </p>
           </div>
 
@@ -54,13 +55,16 @@ export default async function DisplayPage() {
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Next Loop Start
             </p>
-            <p className="text-4xl font-heading leading-none mb-4">
+            <p className="text-5xl font-heading leading-none">
               <CountdownTimer config={config} finished={finished} />
             </p>
+          </div>
+
+          <div className="text-center">
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Elapsed Time
             </p>
-            <p className="text-4xl font-heading leading-none">
+            <p className="text-5xl font-heading leading-none">
               <ElapsedTimer config={config} finished={finished} />
             </p>
           </div>
@@ -68,7 +72,7 @@ export default async function DisplayPage() {
 
         {/* Race info card */}
         {config.title && (
-          <div className="fact-card mb-10">
+          <div className="fact-card mb-10 mt-16">
             <h3 className="uppercase mb-3">
               {config.title}
             </h3>
