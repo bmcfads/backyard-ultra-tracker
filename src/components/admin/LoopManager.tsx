@@ -75,7 +75,7 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="uppercase">Loops</h2>
+      <h2>Loops</h2>
 
       <button
         onClick={handleLoopCompleted}

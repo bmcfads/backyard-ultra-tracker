@@ -66,7 +66,7 @@ export function VideoManager({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h2 className="uppercase">Videos</h2>
+      <h2>Videos</h2>
 
       <div className="flex flex-col gap-1">
         <label className="label">Video Mode</label>

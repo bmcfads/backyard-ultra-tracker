@@ -15,20 +15,20 @@ export function LoopTable({ loops }: LoopTableProps) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm border-collapse">
         <thead>
-          <tr className="border-b border-border text-muted text-left">
+          <tr className="border-b border-border text-muted text-center">
             <th className="py-2 pr-4 font-normal">#</th>
-            <th className="py-2 pr-4 font-normal">Time Completed</th>
-            <th className="py-2 pr-4 font-normal">Duration</th>
-            <th className="py-2 pr-4 font-normal">Pace</th>
-            <th className="py-2 font-normal">Cumulative km</th>
+            <th className="py-2 pr-4 font-normal">TIME COMPLETED</th>
+            <th className="py-2 pr-4 font-normal">DURATION</th>
+            <th className="py-2 pr-4 font-normal">PACE</th>
+            <th className="py-2 font-normal">CUMULATIVE KM</th>
           </tr>
         </thead>
         <tbody>
           {loops.map((loop) => (
-            <tr key={loop.id} className="border-b border-border/50">
+            <tr key={loop.id} className="border-b border-border/50 text-center">
               <td className="py-2 pr-4 tabular-nums">{loop.loopCount}</td>
               <td className="py-2 pr-4 tabular-nums">
-                {loop.date} {loop.time}
+                {loop.date} @ {loop.time}
               </td>
               <td className="py-2 pr-4 tabular-nums">{loop.duration}</td>
               <td className="py-2 pr-4 tabular-nums">{loop.pace}/km</td>

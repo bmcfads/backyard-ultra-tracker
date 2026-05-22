@@ -104,7 +104,7 @@ export default async function DisplayPage() {
         )}
 
         {/* Loop table */}
-        <h2 className="text-center uppercase mb-4">
+        <h2 className="text-center mb-4">
           Loop Information
         </h2>
         <div className="mb-10">
@@ -115,7 +115,7 @@ export default async function DisplayPage() {
         {((videoMode === "profile" && tiktokUsername) ||
           (videoMode === "urls" && videos.length > 0)) && (
           <>
-            <h2 className="text-center uppercase mb-4">
+            <h2 className="text-center mb-4">
               Updates
             </h2>
             <div className="mb-4">

@@ -36,7 +36,7 @@ export function RaceConfigForm({ config, password, onRefresh }: RaceConfigFormPr
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h2 className="uppercase">Race Info</h2>
+      <h2>Race Info</h2>
 
       <div className="flex flex-col gap-1">
         <label className="label">Race Title</label>
