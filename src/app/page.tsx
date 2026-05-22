@@ -21,12 +21,14 @@ export default async function DisplayPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
         {/* Status header */}
-        <h1 className="text-center uppercase mb-10">
+        <h1 className="text-center uppercase leading-none mb-10">
           {statusLabel(status)}
         </h1>
 
+        <hr className="border-border mb-10" />
+
         {/* Stats: loops completed */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-14">
           <p className="text-xs text-muted uppercase tracking-widest mb-2">
             Loops Completed
           </p>
@@ -36,7 +38,7 @@ export default async function DisplayPage() {
         </div>
 
         {/* Stats: distance + timers */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
           <div className="text-center">
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
               Total Distance
@@ -72,7 +74,7 @@ export default async function DisplayPage() {
 
         {/* Race info card */}
         {config.title && (
-          <div className="fact-card mt-14 mb-10 text-center">
+          <div className="fact-card mb-10 text-center">
             <h4 className="uppercase mb-4">
               {config.title}
             </h4>
@@ -113,10 +115,10 @@ export default async function DisplayPage() {
         {((videoMode === "profile" && tiktokUsername) ||
           (videoMode === "urls" && videos.length > 0)) && (
           <>
-            <h2 className="text-center uppercase mb-6">
+            <h2 className="text-center uppercase mb-4">
               Updates
             </h2>
-            <div className="mb-10">
+            <div className="mb-4">
               <TikTokSection
                 videoMode={videoMode}
                 tiktokUsername={tiktokUsername}
