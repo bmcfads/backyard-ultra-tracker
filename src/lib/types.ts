@@ -17,7 +17,6 @@ export interface Loop {
 }
 
 export type RunnerStatus = "not_started" | "in_progress" | "finished";
-export type VideoMode = "profile" | "urls";
 
 export interface RaceFinished {
   isFinished: boolean;
@@ -29,7 +28,5 @@ export interface RaceData {
   config: RaceConfig;
   finished: RaceFinished;
   loops: Loop[];
-  videoMode: VideoMode;
-  tiktokUsername: string;
-  videos: string[];
+  youtubePlaylistId: string;
 }

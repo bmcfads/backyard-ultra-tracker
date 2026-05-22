@@ -1,6 +1,6 @@
 import { Redis } from "@upstash/redis";
 import { KV_KEYS, DEFAULT_CONFIG } from "./constants";
-import type { RaceConfig, Loop, VideoMode, RaceFinished, RaceData } from "./types";
+import type { RaceConfig, Loop, RaceFinished, RaceData } from "./types";
 
 const kv = new Redis({
   url: process.env.KV_REST_API_URL!,
@@ -8,23 +8,18 @@ const kv = new Redis({
 });
 
 export async function getRaceData(): Promise<RaceData> {
-  const [config, finished, loops, videoMode, tiktokUsername, videos] =
-    await Promise.all([
-      kv.get<RaceConfig>(KV_KEYS.config),
-      kv.get<RaceFinished>(KV_KEYS.finished),
-      kv.get<Loop[]>(KV_KEYS.loops),
-      kv.get<VideoMode>(KV_KEYS.videoMode),
-      kv.get<string>(KV_KEYS.tiktokUsername),
-      kv.get<string[]>(KV_KEYS.videos),
-    ]);
+  const [config, finished, loops, youtubePlaylistId] = await Promise.all([
+    kv.get<RaceConfig>(KV_KEYS.config),
+    kv.get<RaceFinished>(KV_KEYS.finished),
+    kv.get<Loop[]>(KV_KEYS.loops),
+    kv.get<string>(KV_KEYS.youtubePlaylistId),
+  ]);
 
   return {
     config: config ?? { ...DEFAULT_CONFIG },
     finished: finished ?? { isFinished: false },
     loops: loops ?? [],
-    videoMode: videoMode ?? "profile",
-    tiktokUsername: tiktokUsername ?? "",
-    videos: videos ?? [],
+    youtubePlaylistId: youtubePlaylistId ?? "",
   };
 }
 
@@ -45,14 +40,6 @@ export async function setLoops(loops: Loop[]): Promise<void> {
   await kv.set(KV_KEYS.loops, loops);
 }
 
-export async function setVideoMode(mode: VideoMode): Promise<void> {
-  await kv.set(KV_KEYS.videoMode, mode);
-}
-
-export async function setTikTokUsername(username: string): Promise<void> {
-  await kv.set(KV_KEYS.tiktokUsername, username);
-}
-
-export async function setVideos(videos: string[]): Promise<void> {
-  await kv.set(KV_KEYS.videos, videos);
+export async function setYouTubePlaylistId(playlistId: string): Promise<void> {
+  await kv.set(KV_KEYS.youtubePlaylistId, playlistId);
 }

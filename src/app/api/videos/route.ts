@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { setVideoMode, setTikTokUsername, setVideos } from "@/lib/kv";
-import type { VideoMode } from "@/lib/types";
+import { setYouTubePlaylistId } from "@/lib/kv";
 
 function isAuthorized(req: NextRequest): boolean {
   const auth = req.headers.get("x-admin-auth");
@@ -12,13 +11,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { videoMode, tiktokUsername, videos } = await req.json();
-
-  await Promise.all([
-    setVideoMode(videoMode as VideoMode),
-    setTikTokUsername(tiktokUsername ?? ""),
-    setVideos(videos ?? []),
-  ]);
-
+  const { youtubePlaylistId } = await req.json();
+  await setYouTubePlaylistId(youtubePlaylistId ?? "");
   return NextResponse.json({ ok: true });
 }

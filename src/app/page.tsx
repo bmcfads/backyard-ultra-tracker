@@ -3,19 +3,40 @@ import { getRunnerStatus, sortLoops, statusLabel } from "@/lib/race";
 import { LOOP_DISTANCE_KM } from "@/lib/constants";
 import { CountdownTimer, ElapsedTimer } from "@/components/Timers";
 import { LoopTable } from "@/components/LoopTable";
-import { TikTokSection } from "@/components/TikTokSection";
+import { YouTubeSection } from "@/components/YouTubeSection";
 import { Footer } from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
 
+async function fetchYouTubePlaylist(playlistId: string): Promise<string[]> {
+  if (!playlistId || !process.env.YOUTUBE_API_KEY) return [];
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&key=${process.env.YOUTUBE_API_KEY}`
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (
+      data.items
+        ?.map((item: { snippet: { resourceId: { videoId: string } } }) =>
+          item.snippet.resourceId.videoId
+        )
+        .filter(Boolean) ?? []
+    );
+  } catch {
+    return [];
+  }
+}
+
 export default async function DisplayPage() {
   const data = await getRaceData();
-  const { config, finished, loops, videoMode, tiktokUsername, videos } = data;
+  const { config, finished, loops, youtubePlaylistId } = data;
 
   const status = getRunnerStatus(config, finished);
   const sortedLoops = sortLoops(loops);
   const loopCount = sortedLoops.length;
   const totalDistance = (loopCount * LOOP_DISTANCE_KM).toFixed(2);
+  const youtubeVideoIds = await fetchYouTubePlaylist(youtubePlaylistId);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -112,18 +133,13 @@ export default async function DisplayPage() {
         </div>
 
         {/* Videos */}
-        {((videoMode === "profile" && tiktokUsername) ||
-          (videoMode === "urls" && videos.length > 0)) && (
+        {youtubePlaylistId && (
           <>
             <h2 className="text-center mb-4">
               Updates
             </h2>
             <div className="mb-4">
-              <TikTokSection
-                videoMode={videoMode}
-                tiktokUsername={tiktokUsername}
-                videos={videos}
-              />
+              <YouTubeSection videoIds={youtubeVideoIds} />
             </div>
           </>
         )}

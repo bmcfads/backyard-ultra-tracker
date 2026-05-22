@@ -76,9 +76,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
       <div className="my-8 border-t border-border" />
 
       <VideoManager
-        videoMode={data.videoMode}
-        tiktokUsername={data.tiktokUsername}
-        videos={data.videos}
+        youtubePlaylistId={data.youtubePlaylistId}
         password={password}
         onRefresh={onRefresh}
       />
