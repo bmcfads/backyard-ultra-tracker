@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import type { RaceConfig } from "@/lib/types";
+import { COMMON_TIMEZONES } from "@/lib/constants";
 
 interface RaceConfigFormProps {
   config: RaceConfig;
@@ -80,6 +81,20 @@ export function RaceConfigForm({ config, password, onRefresh }: RaceConfigFormPr
             required
           />
         </div>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="label">Race Timezone</label>
+        <select
+          className="input"
+          value={form.timezone || "UTC"}
+          onChange={(e) => setForm({ ...form, timezone: e.target.value })}
+          required
+        >
+          {COMMON_TIMEZONES.map((tz) => (
+            <option key={tz} value={tz}>{tz}</option>
+          ))}
+        </select>
       </div>
 
       <div className="flex flex-col gap-1">

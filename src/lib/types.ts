@@ -3,6 +3,7 @@ export interface RaceConfig {
   location: string;
   startDate: string; // YYYY-MM-DD
   startTime: string; // HH:MM (24h)
+  timezone: string; // IANA timezone, e.g. "America/Vancouver"
   summary: string;
 }
 

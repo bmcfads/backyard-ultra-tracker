@@ -13,9 +13,25 @@ export function getRunnerStatus(
   return "not_started";
 }
 
+function parseLocalInTimezone(dateStr: string, timeStr: string, tz: string): number {
+  // Normalize timeStr to always include seconds
+  const time = timeStr.length === 5 ? timeStr + ":00" : timeStr;
+  // Parse as UTC first to get a reference point
+  const refMs = Date.parse(`${dateStr}T${time}Z`);
+  // Find what `tz` displays for that UTC moment
+  const tzStr = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: tz,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).format(new Date(refMs)).replace(" ", "T");
+  // Shift by the difference to land on the correct UTC instant
+  return refMs + (refMs - Date.parse(tzStr + "Z"));
+}
+
 export function getRaceStartMs(config: RaceConfig): number {
   if (!config.startDate || !config.startTime) return Infinity;
-  return new Date(`${config.startDate}T${config.startTime}:00`).getTime();
+  return parseLocalInTimezone(config.startDate, config.startTime, config.timezone || "UTC");
 }
 
 export function formatDuration(ms: number): string {
@@ -39,7 +55,7 @@ export function calculateLoopDuration(
   loopTime: string,
   config: RaceConfig
 ): { duration: string; pace: string } {
-  const loopMs = new Date(`${loopDate}T${loopTime}`).getTime();
+  const loopMs = parseLocalInTimezone(loopDate, loopTime, config.timezone || "UTC");
   const raceStartMs = getRaceStartMs(config);
 
   const elapsed = loopMs - raceStartMs;
