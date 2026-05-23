@@ -29,6 +29,23 @@ function parseLocalInTimezone(dateStr: string, timeStr: string, tz: string): num
   return refMs + (refMs - Date.parse(tzStr + "Z"));
 }
 
+export function formatLoopTime(loop: Loop, timezone: string): string {
+  const ms = parseLocalInTimezone(loop.date, loop.time, timezone);
+  const date = new Date(ms);
+  const dateParts = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: timezone,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const get = (type: string) => dateParts.find(p => p.type === type)?.value ?? "";
+  const tzAbbr = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    timeZoneName: "short",
+  }).formatToParts(date).find(p => p.type === "timeZoneName")?.value ?? timezone;
+  return `${get("year")}-${get("month")}-${get("day")} @ ${get("hour")}:${get("minute")}:${get("second")} ${tzAbbr}`;
+}
+
 export function getRaceStartMs(config: RaceConfig): number {
   if (!config.startDate || !config.startTime) return Infinity;
   return parseLocalInTimezone(config.startDate, config.startTime, config.timezone || "UTC");

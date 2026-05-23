@@ -139,7 +139,7 @@ export default async function DisplayPage() {
           Loop Information
         </h2>
         <div className="mb-10">
-          <LoopTable loops={sortedLoops} />
+          <LoopTable loops={sortedLoops} timezone={config.timezone || "UTC"} />
         </div>
 
         {/* Videos */}

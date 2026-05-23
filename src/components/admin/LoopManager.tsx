@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import type { Loop, RaceConfig } from "@/lib/types";
+import { formatLoopTime } from "@/lib/race";
 
 interface LoopManagerProps {
   loops: Loop[];
-  config?: RaceConfig;
+  config: RaceConfig;
   password: string;
   onRefresh: () => Promise<void>;
 }
 
-export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
+export function LoopManager({ loops, config, password, onRefresh }: LoopManagerProps) {
+  const timezone = config.timezone || "UTC";
   const [adding, setAdding] = useState(false);
   const [newDate, setNewDate] = useState("");
   const [newTime, setNewTime] = useState("");
@@ -61,7 +63,10 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2>Loops</h2>
+      <div className="flex items-baseline gap-3">
+        <h2>Loops</h2>
+        <span className="text-xs text-muted">{timezone}</span>
+      </div>
 
       {loops.length > 0 && (
         <div className="flex flex-col gap-2 mt-2">
@@ -111,7 +116,8 @@ export function LoopManager({ loops, password, onRefresh }: LoopManagerProps) {
                   />
                 </div>
               </div>
-              <div className="flex gap-4 text-xs text-muted">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+                <span>{formatLoopTime(loop, timezone)}</span>
                 <span>Duration: {loop.duration}</span>
                 <span>Pace: {loop.pace}/km</span>
                 <span>{loop.cumulativeKm.toFixed(2)} km</span>

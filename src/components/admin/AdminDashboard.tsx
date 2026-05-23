@@ -102,6 +102,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
 
       <LoopManager
         loops={data.loops}
+        config={data.config}
         password={password}
         onRefresh={onRefresh}
       />

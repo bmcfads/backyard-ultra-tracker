@@ -1,10 +1,12 @@
 import type { Loop } from "@/lib/types";
+import { formatLoopTime } from "@/lib/race";
 
 interface LoopTableProps {
   loops: Loop[];
+  timezone: string;
 }
 
-export function LoopTable({ loops }: LoopTableProps) {
+export function LoopTable({ loops, timezone }: LoopTableProps) {
   if (loops.length === 0) {
     return (
       <p className="text-muted text-sm text-center py-4">No loops recorded yet.</p>
@@ -28,7 +30,7 @@ export function LoopTable({ loops }: LoopTableProps) {
             <tr key={loop.id} className="border-b border-border/50 text-center">
               <td className="py-2 pr-4 tabular-nums">{loop.loopCount}</td>
               <td className="py-2 pr-4 tabular-nums">
-                {loop.date} @ {loop.time}
+                {formatLoopTime(loop, timezone)}
               </td>
               <td className="py-2 pr-4 tabular-nums">{loop.duration}</td>
               <td className="py-2 pr-4 tabular-nums">{loop.pace}/km</td>

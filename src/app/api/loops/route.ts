@@ -32,8 +32,16 @@ export async function POST(req: NextRequest) {
 
   if (auto) {
     const now = new Date();
-    loopDate = now.toISOString().slice(0, 10);
-    loopTime = now.toTimeString().slice(0, 8);
+    const tz = config.timezone || "UTC";
+    const parts = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: tz,
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+      hour12: false,
+    }).format(now);
+    // sv-SE format: "2024-06-15 08:00:00"
+    loopDate = parts.slice(0, 10);
+    loopTime = parts.slice(11, 19);
   }
 
   const sorted = sortLoops(existingLoops);
