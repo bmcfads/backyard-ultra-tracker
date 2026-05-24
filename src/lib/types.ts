@@ -4,6 +4,7 @@ export interface RaceConfig {
   startDate: string; // YYYY-MM-DD
   startTime: string; // HH:MM (24h)
   timezone: string; // IANA timezone, e.g. "America/Vancouver"
+  subtitle: string; // short line shown under the status heading on the display page
   summary: string;
 }
 

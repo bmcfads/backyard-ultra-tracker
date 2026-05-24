@@ -13,6 +13,7 @@ export const DEFAULT_CONFIG = {
   startDate: "",
   startTime: "",
   timezone: "UTC",
+  subtitle: "",
   summary: "",
 };
 

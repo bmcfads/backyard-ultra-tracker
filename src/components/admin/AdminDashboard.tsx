@@ -16,6 +16,9 @@ interface AdminDashboardProps {
 export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProps) {
   const [finishing, setFinishing] = useState(false);
   const [loopBusy, setLoopBusy] = useState(false);
+  const [subtitle, setSubtitle] = useState(data.config.subtitle || "");
+  const [subtitleSaving, setSubtitleSaving] = useState(false);
+  const [subtitleSaved, setSubtitleSaved] = useState(false);
   const raceStartMs = getRaceStartMs(data.config);
 
   function getCurrentElapsed(): string {
@@ -36,6 +39,19 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
     });
     await onRefresh();
     setLoopBusy(false);
+  }
+
+  async function saveSubtitle() {
+    setSubtitleSaving(true);
+    await fetch("/api/config", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-auth": password },
+      body: JSON.stringify({ ...data.config, subtitle }),
+    });
+    await onRefresh();
+    setSubtitleSaving(false);
+    setSubtitleSaved(true);
+    setTimeout(() => setSubtitleSaved(false), 2000);
   }
 
   async function toggleFinish() {
@@ -89,6 +105,21 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
           ? "Race Finished (click to undo)"
           : "Finish Race"}
       </button>
+
+      <div className="my-8 border-t border-border" />
+
+      <div className="flex flex-col gap-3">
+        <h2>Display Message</h2>
+        <input
+          className="input"
+          value={subtitle}
+          onChange={(e) => setSubtitle(e.target.value)}
+          placeholder="Short line shown under the status heading"
+        />
+        <button onClick={saveSubtitle} disabled={subtitleSaving} className="btn-primary">
+          {subtitleSaving ? "Saving..." : subtitleSaved ? "Saved!" : "Save Message"}
+        </button>
+      </div>
 
       <div className="my-8 border-t border-border" />
 

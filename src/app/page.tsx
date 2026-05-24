@@ -44,7 +44,7 @@ export default async function DisplayPage() {
       <AutoRefresh />
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
         {/* Status header */}
-        <div className="flex items-center justify-center gap-3 mb-10">
+        <div className="flex items-center justify-center gap-3 mb-3">
           {status === "in_progress" && (
             <span className="relative flex h-3 w-3 flex-shrink-0">
               <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
@@ -55,6 +55,11 @@ export default async function DisplayPage() {
             {statusLabel(status)}
           </h1>
         </div>
+
+        {config.subtitle && (
+          <p className="text-sm text-muted text-center mb-10">{config.subtitle}</p>
+        )}
+        {!config.subtitle && <div className="mb-10" />}
 
         <hr className="border-border mb-10" />
 
