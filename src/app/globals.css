@@ -7,6 +7,12 @@
 }
 
 @layer base {
+  /* Force webkit date/time input fields to inherit the input's text color */
+  input[type="time"]::-webkit-datetime-edit,
+  input[type="date"]::-webkit-datetime-edit {
+    color: inherit;
+  }
+
   html {
     font-size: 18px;
     background-color: #0f0f0f;

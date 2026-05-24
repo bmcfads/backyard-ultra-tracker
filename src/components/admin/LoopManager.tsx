@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Loop, RaceConfig } from "@/lib/types";
-import { formatLoopTime } from "@/lib/race";
 
 interface LoopManagerProps {
   loops: Loop[];
@@ -11,27 +10,82 @@ interface LoopManagerProps {
   onRefresh: () => Promise<void>;
 }
 
+function clamp(val: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, isNaN(val) ? min : val));
+}
+
+function LoopTimeEditor({
+  storedTime,
+  disabled,
+  onUpdate,
+}: {
+  storedTime: string;
+  disabled: boolean;
+  onUpdate: (time: string) => void;
+}) {
+  const parse = (t: string) => {
+    const [h = "0", m = "0", s = "0"] = t.split(":");
+    return { h: parseInt(h, 10), m: parseInt(m, 10), s: parseInt(s, 10) };
+  };
+  const init = parse(storedTime);
+  const [h, setH] = useState(init.h);
+  const [m, setM] = useState(init.m);
+  const [s, setS] = useState(init.s);
+
+  useEffect(() => {
+    const p = parse(storedTime);
+    setH(p.h); setM(p.m); setS(p.s);
+  }, [storedTime]);
+
+  function commit() {
+    const full = [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
+    if (full !== storedTime) onUpdate(full);
+  }
+
+  return (
+    <div className="flex gap-1 items-center">
+      <input type="number" min={0} max={23}
+        className="input text-sm py-1 w-14 text-center" value={h}
+        onChange={(e) => setH(clamp(parseInt(e.target.value, 10), 0, 23))}
+        onBlur={commit} disabled={disabled} />
+      <span className="text-xs text-muted">:</span>
+      <input type="number" min={0} max={59}
+        className="input text-sm py-1 w-14 text-center" value={m}
+        onChange={(e) => setM(clamp(parseInt(e.target.value, 10), 0, 59))}
+        onBlur={commit} disabled={disabled} />
+      <span className="text-xs text-muted">:</span>
+      <input type="number" min={0} max={59}
+        className="input text-sm py-1 w-14 text-center" value={s}
+        onChange={(e) => setS(clamp(parseInt(e.target.value, 10), 0, 59))}
+        onBlur={commit} disabled={disabled} />
+    </div>
+  );
+}
+
 export function LoopManager({ loops, config, password, onRefresh }: LoopManagerProps) {
   const timezone = config.timezone || "UTC";
   const [adding, setAdding] = useState(false);
   const [newDate, setNewDate] = useState("");
-  const [newTime, setNewTime] = useState("");
+  const [newH, setNewH] = useState(0);
+  const [newM, setNewM] = useState(0);
+  const [newS, setNewS] = useState(0);
   const [busy, setBusy] = useState<string | null>(null);
 
   async function handleAddManual() {
-    if (!newDate || !newTime) return;
+    if (!newDate) return;
     setBusy("manual");
+    const fullTime = [newH, newM, newS].map((n) => String(n).padStart(2, "0")).join(":");
     await fetch("/api/loops", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-admin-auth": password,
       },
-      body: JSON.stringify({ date: newDate, time: newTime }),
+      body: JSON.stringify({ date: newDate, time: fullTime }),
     });
     await onRefresh();
     setNewDate("");
-    setNewTime("");
+    setNewH(0); setNewM(0); setNewS(0);
     setAdding(false);
     setBusy(null);
   }
@@ -102,25 +156,17 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="label">Time</label>
-                  <input
-                    type="time"
-                    step="1"
-                    className="input text-sm py-1"
-                    defaultValue={loop.time}
-                    onBlur={(e) => {
-                      if (e.target.value !== loop.time) {
-                        handleUpdate(loop, "time", e.target.value);
-                      }
-                    }}
+                  <LoopTimeEditor
+                    storedTime={loop.time}
                     disabled={busy === loop.id}
+                    onUpdate={(t) => handleUpdate(loop, "time", t)}
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
-                <span>{formatLoopTime(loop, timezone)}</span>
-                <span>Duration: {loop.duration}</span>
-                <span>Pace: {loop.pace}/km</span>
-                <span>{loop.cumulativeKm.toFixed(2)} km</span>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted mt-1">
+                <span>Duration: <span className="text-text">{loop.duration}</span></span>
+                <span>Pace: <span className="text-text">{loop.pace}/km</span></span>
+                <span>Dist: <span className="text-text">{loop.cumulativeKm.toFixed(2)} km</span></span>
               </div>
             </div>
           ))}
@@ -142,19 +188,25 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
             </div>
             <div className="flex flex-col gap-1">
               <label className="label">Time</label>
-              <input
-                type="time"
-                step="1"
-                className="input text-sm py-1"
-                value={newTime}
-                onChange={(e) => setNewTime(e.target.value)}
-              />
+              <div className="flex gap-1 items-center">
+                <input type="number" min={0} max={23}
+                  className="input text-sm py-1 w-14 text-center" value={newH}
+                  onChange={(e) => setNewH(clamp(parseInt(e.target.value, 10), 0, 23))} />
+                <span className="text-xs text-muted">:</span>
+                <input type="number" min={0} max={59}
+                  className="input text-sm py-1 w-14 text-center" value={newM}
+                  onChange={(e) => setNewM(clamp(parseInt(e.target.value, 10), 0, 59))} />
+                <span className="text-xs text-muted">:</span>
+                <input type="number" min={0} max={59}
+                  className="input text-sm py-1 w-14 text-center" value={newS}
+                  onChange={(e) => setNewS(clamp(parseInt(e.target.value, 10), 0, 59))} />
+              </div>
             </div>
           </div>
           <div className="flex gap-2">
             <button
               onClick={handleAddManual}
-              disabled={busy === "manual" || !newDate || !newTime}
+              disabled={busy === "manual" || !newDate}
               className="btn-primary flex-1 text-sm py-2"
             >
               {busy === "manual" ? "Saving..." : "Add Loop"}
