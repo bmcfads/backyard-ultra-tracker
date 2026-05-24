@@ -71,8 +71,9 @@ export function formatDuration(ms: number): string {
 export function formatPace(durationMs: number): string {
   const totalMinutes = durationMs / 1000 / 60;
   const pacePerKm = totalMinutes / LOOP_DISTANCE_KM;
-  const paceMinutes = Math.floor(pacePerKm);
-  const paceSeconds = Math.round((pacePerKm - paceMinutes) * 60);
+  const totalPaceSeconds = Math.round(pacePerKm * 60);
+  const paceMinutes = Math.floor(totalPaceSeconds / 60);
+  const paceSeconds = totalPaceSeconds % 60;
   return `${paceMinutes}:${String(paceSeconds).padStart(2, "0")}`;
 }
 
