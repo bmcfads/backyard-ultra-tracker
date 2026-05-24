@@ -98,7 +98,7 @@ export default async function DisplayPage() {
               Elapsed Time
             </p>
             <p className="text-5xl font-heading leading-none">
-              <ElapsedTimer config={config} finished={finished} />
+              <ElapsedTimer config={config} finished={finished} loops={sortedLoops} />
             </p>
           </div>
         </div>

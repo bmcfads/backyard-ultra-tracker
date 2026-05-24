@@ -5,7 +5,7 @@ import { RaceConfigForm } from "./RaceConfigForm";
 import { LoopManager } from "./LoopManager";
 import { VideoManager } from "./VideoManager";
 import type { RaceData } from "@/lib/types";
-import { getRaceStartMs, formatDuration } from "@/lib/race";
+import { getRaceStartMs, formatDuration, lastLoopElapsed } from "@/lib/race";
 
 interface AdminDashboardProps {
   data: RaceData;
@@ -41,7 +41,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
   async function toggleFinish() {
     setFinishing(true);
     const isFinishing = !data.finished.isFinished;
-    const elapsedSnapshot = isFinishing ? getCurrentElapsed() : undefined;
+    const elapsedSnapshot = isFinishing ? lastLoopElapsed(data.loops, data.config) : undefined;
 
     await fetch("/api/finish", {
       method: "POST",

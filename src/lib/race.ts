@@ -29,6 +29,15 @@ function parseLocalInTimezone(dateStr: string, timeStr: string, tz: string): num
   return refMs + (refMs - Date.parse(tzStr + "Z"));
 }
 
+export function lastLoopElapsed(loops: Loop[], config: RaceConfig): string {
+  const sorted = sortLoops(loops);
+  const last = sorted[sorted.length - 1];
+  if (!last) return "00:00:00";
+  const loopMs = parseLocalInTimezone(last.date, last.time, config.timezone || "UTC");
+  const raceStartMs = getRaceStartMs(config);
+  return formatDuration(Math.max(0, loopMs - raceStartMs));
+}
+
 export function formatLoopTime(loop: Loop, timezone: string): string {
   const ms = parseLocalInTimezone(loop.date, loop.time, timezone);
   const date = new Date(ms);
