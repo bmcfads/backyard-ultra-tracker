@@ -1,5 +1,5 @@
-import { LOOP_DISTANCE_KM } from "./constants";
-import type { Loop, RaceConfig, RunnerStatus, RaceFinished } from "./types";
+import { YARD_DISTANCE_KM } from "./constants";
+import type { Yard, RaceConfig, RunnerStatus, RaceFinished } from "./types";
 
 export function getRunnerStatus(
   config: RaceConfig,
@@ -29,17 +29,17 @@ function parseLocalInTimezone(dateStr: string, timeStr: string, tz: string): num
   return refMs + (refMs - Date.parse(tzStr + "Z"));
 }
 
-export function lastLoopElapsed(loops: Loop[], config: RaceConfig): string {
-  const sorted = sortLoops(loops);
+export function lastYardElapsed(yards: Yard[], config: RaceConfig): string {
+  const sorted = sortYards(yards);
   const last = sorted[sorted.length - 1];
   if (!last) return "00:00:00";
-  const loopMs = parseLocalInTimezone(last.date, last.time, config.timezone || "UTC");
+  const yardMs = parseLocalInTimezone(last.date, last.time, config.timezone || "UTC");
   const raceStartMs = getRaceStartMs(config);
-  return formatDuration(Math.max(0, loopMs - raceStartMs));
+  return formatDuration(Math.max(0, yardMs - raceStartMs));
 }
 
-export function formatLoopTime(loop: Loop, timezone: string): string {
-  const ms = parseLocalInTimezone(loop.date, loop.time, timezone);
+export function formatYardTime(yard: Yard, timezone: string): string {
+  const ms = parseLocalInTimezone(yard.date, yard.time, timezone);
   const date = new Date(ms);
   const dateParts = new Intl.DateTimeFormat("sv-SE", {
     timeZone: timezone,
@@ -70,51 +70,51 @@ export function formatDuration(ms: number): string {
 
 export function formatPace(durationMs: number): string {
   const totalMinutes = durationMs / 1000 / 60;
-  const pacePerKm = totalMinutes / LOOP_DISTANCE_KM;
+  const pacePerKm = totalMinutes / YARD_DISTANCE_KM;
   const totalPaceSeconds = Math.round(pacePerKm * 60);
   const paceMinutes = Math.floor(totalPaceSeconds / 60);
   const paceSeconds = totalPaceSeconds % 60;
   return `${paceMinutes}:${String(paceSeconds).padStart(2, "0")}`;
 }
 
-export function calculateLoopDuration(
-  loopDate: string,
-  loopTime: string,
+export function calculateYardDuration(
+  yardDate: string,
+  yardTime: string,
   config: RaceConfig
 ): { duration: string; pace: string } {
-  const loopMs = parseLocalInTimezone(loopDate, loopTime, config.timezone || "UTC");
+  const yardMs = parseLocalInTimezone(yardDate, yardTime, config.timezone || "UTC");
   const raceStartMs = getRaceStartMs(config);
 
-  const elapsed = loopMs - raceStartMs;
+  const elapsed = yardMs - raceStartMs;
   const hourMs = 3600 * 1000;
   const completedHours = Math.floor(elapsed / hourMs);
   const lastHourMarkMs = raceStartMs + completedHours * hourMs;
 
-  const durationMs = loopMs - lastHourMarkMs;
+  const durationMs = yardMs - lastHourMarkMs;
   return {
     duration: formatDuration(durationMs),
     pace: formatPace(durationMs),
   };
 }
 
-export function sortLoops(loops: Loop[]): Loop[] {
-  return [...loops].sort((a, b) => {
+export function sortYards(yards: Yard[]): Yard[] {
+  return [...yards].sort((a, b) => {
     const aMs = new Date(`${a.date}T${a.time}`).getTime();
     const bMs = new Date(`${b.date}T${b.time}`).getTime();
     return aMs - bMs;
   });
 }
 
-export function recalculateLoops(loops: Loop[], config: RaceConfig): Loop[] {
-  const sorted = sortLoops(loops);
-  return sorted.map((loop, idx) => {
-    const { duration, pace } = calculateLoopDuration(loop.date, loop.time, config);
+export function recalculateYards(yards: Yard[], config: RaceConfig): Yard[] {
+  const sorted = sortYards(yards);
+  return sorted.map((yard, idx) => {
+    const { duration, pace } = calculateYardDuration(yard.date, yard.time, config);
     return {
-      ...loop,
-      loopCount: idx + 1,
+      ...yard,
+      yardCount: idx + 1,
       duration,
       pace,
-      cumulativeKm: parseFloat(((idx + 1) * LOOP_DISTANCE_KM).toFixed(2)),
+      cumulativeKm: parseFloat(((idx + 1) * YARD_DISTANCE_KM).toFixed(2)),
     };
   });
 }

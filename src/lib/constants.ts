@@ -1,9 +1,9 @@
-export const LOOP_DISTANCE_KM = 6.706;
+export const YARD_DISTANCE_KM = 6.706;
 
 export const KV_KEYS = {
   config: "race:config",
   finished: "race:finished",
-  loops: "race:loops",
+  yards: "race:yards",
   youtubePlaylistId: "race:youtubePlaylistId",
 } as const;
 

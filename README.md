@@ -2,7 +2,7 @@
 
 ## What's a Backyard Ultra?
 
-A backyard ultra is one of the most brutal formats in ultrarunning. Every hour, on the hour, you run a 6.706km loop — a precise distance that works out to exactly 100 miles per 24 hours. There's no finish line. You keep running until you're the last person standing. Miss a start, take too long, or decide you're done — and you're out. The winner is whoever completes one more loop than everyone else.
+A backyard ultra is one of the most brutal formats in ultrarunning. Every hour, on the hour, you run a 6.706km loop (typically called a "yard") — a precise distance that works out to exactly 100 miles per 24 hours. There's no finish line. You keep running until you're the last person standing. Miss a start, take too long, or decide you're done — and you're out. The winner is whoever completes one more yard than everyone else.
 
 ## Why This Exists
 
@@ -12,9 +12,9 @@ I didn't have a great answer. So on my flight home from [Imagine Innovators](htt
 
 ## The App
 
-A live race tracker that displays loop completions, elapsed time, total distance, and a countdown to the next loop start. Video updates from the course are pulled automatically from a YouTube playlist and displayed in a grid as they're posted.
+A live race tracker that displays yard completions, elapsed time, total distance, and a countdown to the next yard start. Video updates from the course are pulled automatically from a YouTube playlist and displayed in a grid as they're posted.
 
-The admin panel (password protected) lets me log a completed loop in one tap, adjust the race config, and manage the YouTube playlist link.
+The admin panel (password protected) lets me log a completed yard in one tap, adjust the race config, and manage the YouTube playlist link.
 
 The display page auto-refreshes every 30 seconds so viewers always see current data without needing to reload.
 

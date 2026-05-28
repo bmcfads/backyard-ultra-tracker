@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { setLoops } from "@/lib/kv";
+import { setYards } from "@/lib/kv";
 import { getRaceData } from "@/lib/kv";
-import { recalculateLoops } from "@/lib/race";
+import { recalculateYards } from "@/lib/race";
 
 function isAuthorized(req: NextRequest): boolean {
   const auth = req.headers.get("x-admin-auth");
@@ -18,16 +18,16 @@ export async function PATCH(
 
   const { id } = await params;
   const updates = await req.json();
-  const { config, loops } = await getRaceData();
+  const { config, yards } = await getRaceData();
 
-  const updated = loops.map((loop) =>
-    loop.id === id ? { ...loop, ...updates } : loop
+  const updated = yards.map((yard) =>
+    yard.id === id ? { ...yard, ...updates } : yard
   );
 
-  const recalculated = recalculateLoops(updated, config);
-  await setLoops(recalculated);
+  const recalculated = recalculateYards(updated, config);
+  await setYards(recalculated);
 
-  return NextResponse.json({ ok: true, loops: recalculated });
+  return NextResponse.json({ ok: true, yards: recalculated });
 }
 
 export async function DELETE(
@@ -39,11 +39,11 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const { config, loops } = await getRaceData();
+  const { config, yards } = await getRaceData();
 
-  const filtered = loops.filter((loop) => loop.id !== id);
-  const recalculated = recalculateLoops(filtered, config);
-  await setLoops(recalculated);
+  const filtered = yards.filter((yard) => yard.id !== id);
+  const recalculated = recalculateYards(filtered, config);
+  await setYards(recalculated);
 
-  return NextResponse.json({ ok: true, loops: recalculated });
+  return NextResponse.json({ ok: true, yards: recalculated });
 }

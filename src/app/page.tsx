@@ -1,8 +1,8 @@
 import { getRaceData } from "@/lib/kv";
-import { getRunnerStatus, sortLoops, statusLabel } from "@/lib/race";
-import { LOOP_DISTANCE_KM } from "@/lib/constants";
+import { getRunnerStatus, sortYards, statusLabel } from "@/lib/race";
+import { YARD_DISTANCE_KM } from "@/lib/constants";
 import { CountdownTimer, ElapsedTimer } from "@/components/Timers";
-import { LoopTable } from "@/components/LoopTable";
+import { YardTable } from "@/components/YardTable";
 import { YouTubeSection } from "@/components/YouTubeSection";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { Footer } from "@/components/Footer";
@@ -31,12 +31,12 @@ async function fetchYouTubePlaylist(playlistId: string): Promise<string[]> {
 
 export default async function DisplayPage() {
   const data = await getRaceData();
-  const { config, finished, loops, youtubePlaylistId } = data;
+  const { config, finished, yards, youtubePlaylistId } = data;
 
   const status = getRunnerStatus(config, finished);
-  const sortedLoops = sortLoops(loops);
-  const loopCount = sortedLoops.length;
-  const totalDistance = (loopCount * LOOP_DISTANCE_KM).toFixed(2);
+  const sortedYards = sortYards(yards);
+  const yardCount = sortedYards.length;
+  const totalDistance = (yardCount * YARD_DISTANCE_KM).toFixed(2);
   const youtubeVideoIds = await fetchYouTubePlaylist(youtubePlaylistId);
 
   return (
@@ -63,13 +63,13 @@ export default async function DisplayPage() {
 
         <hr className="border-border mb-10" />
 
-        {/* Stats: loops completed */}
+        {/* Stats: yards completed */}
         <div className="text-center mb-14">
           <p className="text-xs text-muted uppercase tracking-widest mb-2">
-            Loops Completed
+            Yards Completed
           </p>
           <p className="text-8xl font-heading tabular-nums leading-none">
-            {String(loopCount).padStart(2, "0")}
+            {String(yardCount).padStart(2, "0")}
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export default async function DisplayPage() {
               Total Distance
             </p>
             <p className="text-5xl font-heading tabular-nums leading-none">
-              {loopCount === 0 ? (
+              {yardCount === 0 ? (
                 <span>0</span>
               ) : (
                 <span>{totalDistance}</span>
@@ -91,7 +91,7 @@ export default async function DisplayPage() {
 
           <div className="text-center">
             <p className="text-xs text-muted uppercase tracking-widest mb-2">
-              Next Loop Starts In
+              Next Yard Starts In
             </p>
             <p className="text-5xl font-heading leading-none">
               <CountdownTimer config={config} finished={finished} />
@@ -103,7 +103,7 @@ export default async function DisplayPage() {
               Elapsed Time
             </p>
             <p className="text-5xl font-heading leading-none">
-              <ElapsedTimer config={config} finished={finished} loops={sortedLoops} />
+              <ElapsedTimer config={config} finished={finished} yards={sortedYards} />
             </p>
           </div>
         </div>
@@ -139,12 +139,12 @@ export default async function DisplayPage() {
           </div>
         )}
 
-        {/* Loop table */}
+        {/* Yard table */}
         <h2 className="text-center mb-4">
-          Loop Information
+          Yard Information
         </h2>
         <div className="mb-10">
-          <LoopTable loops={sortedLoops} timezone={config.timezone || "UTC"} />
+          <YardTable yards={sortedYards} timezone={config.timezone || "UTC"} />
         </div>
 
         {/* Videos */}

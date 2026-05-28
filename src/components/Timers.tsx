@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatDuration, getRaceStartMs, lastLoopElapsed } from "@/lib/race";
-import type { RaceConfig, RaceFinished, Loop } from "@/lib/types";
+import { formatDuration, getRaceStartMs, lastYardElapsed } from "@/lib/race";
+import type { RaceConfig, RaceFinished, Yard } from "@/lib/types";
 
 function useNow(active: boolean): number {
   const [now, setNow] = useState(() => Date.now());
@@ -46,10 +46,10 @@ export function CountdownTimer({ config, finished }: CountdownTimerProps) {
 interface ElapsedTimerProps {
   config: RaceConfig;
   finished: RaceFinished;
-  loops: Loop[];
+  yards: Yard[];
 }
 
-export function ElapsedTimer({ config, finished, loops }: ElapsedTimerProps) {
+export function ElapsedTimer({ config, finished, yards }: ElapsedTimerProps) {
   const raceStartMs = getRaceStartMs(config);
   const isActive = !finished.isFinished && raceStartMs !== Infinity;
   const now = useNow(isActive);
@@ -59,7 +59,7 @@ export function ElapsedTimer({ config, finished, loops }: ElapsedTimerProps) {
   }
 
   if (finished.isFinished) {
-    return <span className="tabular-nums">{lastLoopElapsed(loops, config)}</span>;
+    return <span className="tabular-nums">{lastYardElapsed(yards, config)}</span>;
   }
 
   if (now < raceStartMs) {

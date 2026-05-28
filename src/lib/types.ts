@@ -8,9 +8,9 @@ export interface RaceConfig {
   summary: string;
 }
 
-export interface Loop {
+export interface Yard {
   id: string;
-  loopCount: number;
+  yardCount: number;
   date: string; // YYYY-MM-DD
   time: string; // HH:MM:SS
   duration: string; // HH:MM:SS
@@ -29,6 +29,6 @@ export interface RaceFinished {
 export interface RaceData {
   config: RaceConfig;
   finished: RaceFinished;
-  loops: Loop[];
+  yards: Yard[];
   youtubePlaylistId: string;
 }

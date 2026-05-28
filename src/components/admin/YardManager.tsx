@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Loop, RaceConfig } from "@/lib/types";
+import type { Yard, RaceConfig } from "@/lib/types";
 
-interface LoopManagerProps {
-  loops: Loop[];
+interface YardManagerProps {
+  yards: Yard[];
   config: RaceConfig;
   password: string;
   onRefresh: () => Promise<void>;
@@ -14,7 +14,7 @@ function clamp(val: number, min: number, max: number) {
   return Math.max(min, Math.min(max, isNaN(val) ? min : val));
 }
 
-function LoopTimeEditor({
+function YardTimeEditor({
   storedTime,
   disabled,
   onUpdate,
@@ -62,7 +62,7 @@ function LoopTimeEditor({
   );
 }
 
-export function LoopManager({ loops, config, password, onRefresh }: LoopManagerProps) {
+export function YardManager({ yards, config, password, onRefresh }: YardManagerProps) {
   const timezone = config.timezone || "UTC";
   const [adding, setAdding] = useState(false);
   const [newDate, setNewDate] = useState("");
@@ -75,7 +75,7 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
     if (!newDate) return;
     setBusy("manual");
     const fullTime = [newH, newM, newS].map((n) => String(n).padStart(2, "0")).join(":");
-    await fetch("/api/loops", {
+    await fetch("/api/yards", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,9 +90,9 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
     setBusy(null);
   }
 
-  async function handleUpdate(loop: Loop, field: "date" | "time", value: string) {
-    setBusy(loop.id);
-    await fetch(`/api/loops/${loop.id}`, {
+  async function handleUpdate(yard: Yard, field: "date" | "time", value: string) {
+    setBusy(yard.id);
+    await fetch(`/api/yards/${yard.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -105,9 +105,9 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Delete this loop?")) return;
+    if (!confirm("Delete this yard?")) return;
     setBusy(id + "-del");
-    await fetch(`/api/loops/${id}`, {
+    await fetch(`/api/yards/${id}`, {
       method: "DELETE",
       headers: { "x-admin-auth": password },
     });
@@ -118,22 +118,22 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-baseline gap-3">
-        <h2>Loops</h2>
+        <h2>Yards</h2>
         <span className="text-xs text-muted">{timezone}</span>
       </div>
 
-      {loops.length > 0 && (
+      {yards.length > 0 && (
         <div className="flex flex-col gap-2 mt-2">
-          {loops.map((loop) => (
+          {yards.map((yard) => (
             <div
-              key={loop.id}
+              key={yard.id}
               className="border border-border rounded p-3 flex flex-col gap-2 text-sm"
             >
               <div className="flex items-center justify-between">
-                <span className="text-muted">#{loop.loopCount}</span>
+                <span className="text-muted">#{yard.yardCount}</span>
                 <button
-                  onClick={() => handleDelete(loop.id)}
-                  disabled={busy === loop.id + "-del"}
+                  onClick={() => handleDelete(yard.id)}
+                  disabled={busy === yard.id + "-del"}
                   className="text-xs text-muted hover:text-red-400 transition-colors"
                 >
                   Delete
@@ -145,28 +145,28 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
                   <input
                     type="date"
                     className="input text-sm py-1"
-                    defaultValue={loop.date}
+                    defaultValue={yard.date}
                     onBlur={(e) => {
-                      if (e.target.value !== loop.date) {
-                        handleUpdate(loop, "date", e.target.value);
+                      if (e.target.value !== yard.date) {
+                        handleUpdate(yard, "date", e.target.value);
                       }
                     }}
-                    disabled={busy === loop.id}
+                    disabled={busy === yard.id}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="label">Time</label>
-                  <LoopTimeEditor
-                    storedTime={loop.time}
-                    disabled={busy === loop.id}
-                    onUpdate={(t) => handleUpdate(loop, "time", t)}
+                  <YardTimeEditor
+                    storedTime={yard.time}
+                    disabled={busy === yard.id}
+                    onUpdate={(t) => handleUpdate(yard, "time", t)}
                   />
                 </div>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted mt-1">
-                <span>Duration: <span className="text-text">{loop.duration}</span></span>
-                <span>Pace: <span className="text-text">{loop.pace}/km</span></span>
-                <span>Dist: <span className="text-text">{loop.cumulativeKm.toFixed(2)} km</span></span>
+                <span>Duration: <span className="text-text">{yard.duration}</span></span>
+                <span>Pace: <span className="text-text">{yard.pace}/km</span></span>
+                <span>Dist: <span className="text-text">{yard.cumulativeKm.toFixed(2)} km</span></span>
               </div>
             </div>
           ))}
@@ -175,7 +175,7 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
 
       {adding ? (
         <div className="border border-border rounded p-3 flex flex-col gap-3">
-          <p className="text-sm text-muted">Add loop manually</p>
+          <p className="text-sm text-muted">Add yard manually</p>
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-1">
               <label className="label">Date</label>
@@ -209,7 +209,7 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
               disabled={busy === "manual" || !newDate}
               className="btn-primary flex-1 text-sm py-2"
             >
-              {busy === "manual" ? "Saving..." : "Add Loop"}
+              {busy === "manual" ? "Saving..." : "Add Yard"}
             </button>
             <button
               onClick={() => setAdding(false)}
@@ -224,7 +224,7 @@ export function LoopManager({ loops, config, password, onRefresh }: LoopManagerP
           onClick={() => setAdding(true)}
           className="text-sm text-muted hover:text-text transition-colors text-left py-1"
         >
-          + Add loop manually
+          + Add yard manually
         </button>
       )}
     </div>

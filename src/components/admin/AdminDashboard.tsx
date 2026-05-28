@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { RaceConfigForm } from "./RaceConfigForm";
-import { LoopManager } from "./LoopManager";
+import { YardManager } from "./YardManager";
 import { VideoManager } from "./VideoManager";
 import type { RaceData } from "@/lib/types";
-import { getRaceStartMs, formatDuration, lastLoopElapsed } from "@/lib/race";
+import { getRaceStartMs, formatDuration, lastYardElapsed } from "@/lib/race";
 
 interface AdminDashboardProps {
   data: RaceData;
@@ -15,7 +15,7 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProps) {
   const [finishing, setFinishing] = useState(false);
-  const [loopBusy, setLoopBusy] = useState(false);
+  const [yardBusy, setYardBusy] = useState(false);
   const [subtitle, setSubtitle] = useState(data.config.subtitle || "");
   const [subtitleSaving, setSubtitleSaving] = useState(false);
   const [subtitleSaved, setSubtitleSaved] = useState(false);
@@ -27,9 +27,9 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
     return formatDuration(now - raceStartMs);
   }
 
-  async function handleLoopCompleted() {
-    setLoopBusy(true);
-    await fetch("/api/loops", {
+  async function handleYardCompleted() {
+    setYardBusy(true);
+    await fetch("/api/yards", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
       body: JSON.stringify({ auto: true }),
     });
     await onRefresh();
-    setLoopBusy(false);
+    setYardBusy(false);
   }
 
   async function saveSubtitle() {
@@ -57,7 +57,7 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
   async function toggleFinish() {
     setFinishing(true);
     const isFinishing = !data.finished.isFinished;
-    const elapsedSnapshot = isFinishing ? lastLoopElapsed(data.loops, data.config) : undefined;
+    const elapsedSnapshot = isFinishing ? lastYardElapsed(data.yards, data.config) : undefined;
 
     await fetch("/api/finish", {
       method: "POST",
@@ -77,11 +77,11 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
       <h1 className="mb-8 text-center">Admin</h1>
 
       <button
-        onClick={handleLoopCompleted}
-        disabled={loopBusy}
+        onClick={handleYardCompleted}
+        disabled={yardBusy}
         className="w-full py-14 rounded bg-accent/10 border border-accent/30 text-accent text-2xl tracking-wide hover:bg-accent/20 transition-colors"
       >
-        {loopBusy ? "Recording..." : "Loop Completed"}
+        {yardBusy ? "Recording..." : "Yard Completed"}
       </button>
 
       <div className="my-8 border-t border-border" />
@@ -131,8 +131,8 @@ export function AdminDashboard({ data, password, onRefresh }: AdminDashboardProp
 
       <div className="my-8 border-t border-border" />
 
-      <LoopManager
-        loops={data.loops}
+      <YardManager
+        yards={data.yards}
         config={data.config}
         password={password}
         onRefresh={onRefresh}
